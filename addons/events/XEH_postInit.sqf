@@ -28,3 +28,31 @@ if (isServer) then {
         };
     }];
 };
+
+// custom chat command system
+[QGVAR(chatMessageSent), {
+    params ["_message"];
+
+    if ((_message select [0,1]) isEqualTo "#") then {
+        private _arguments = (_message select [1]) splitString " ";
+        private _command = _arguments deleteAt 0;
+
+        // check if command is available
+        private _access = ["all"];
+
+        if (IS_ADMIN) then {
+            _access pushBack "admin";
+        };
+
+        if (IS_ADMIN_LOGGED) then {
+            _access pushBack "adminlogged";
+        };
+
+        (GVAR(customChatCommands) getVariable _command) params ["_code", "_availableFor"];
+
+        if (!isNil "_availableFor" && {_availableFor in _access}) then {
+            private ["_message", "_command", "_access", "_availableFor"];
+            _arguments call _code;
+        };
+    };
+}] call CBA_fnc_addEventHandler;
