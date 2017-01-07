@@ -34,8 +34,15 @@ if (isServer) then {
     params ["_message"];
 
     if ((_message select [0,1]) isEqualTo "#") then {
-        private _arguments = _message splitString " ";
-        private _command = (_arguments deleteAt 0) select [1];
+        private _index = _message find " ";
+
+        // no argument
+        if (_index isEqualTo -1) then {
+            _index = count _message;
+        };
+
+        private _command = _message select [1, _index - 1];
+        private _argument = _message select [_index + 2];
 
         // check if command is available
         private _access = ["all"];
@@ -51,11 +58,12 @@ if (isServer) then {
         (GVAR(customChatCommands) getVariable _command) params ["_code", "_availableFor"];
 
         if (!isNil "_availableFor" && {_availableFor in _access}) then {
-            [_arguments, _code] call {
+            [[_argument], _code] call {
                 // prevent bad code from overwriting protected variables
                 private _message = nil;
-                private _arguments = nil;
+                private _index = nil;
                 private _command = nil;
+                private _argument = nil;
                 private _access = nil;
                 private _code = nil;
                 private _availableFor = nil;
