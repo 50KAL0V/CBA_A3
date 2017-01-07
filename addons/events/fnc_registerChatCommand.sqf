@@ -6,7 +6,7 @@ Description:
 
 Parameters:
     _command      - Chat command <STRING>
-    _code         - Code to execute after command was entered. <STRING>
+    _code         - Code to execute after command was entered. <CODE>
     _availableFor - "all", "admin" or "adminLogged" (optional, default: "admin") <STRING>
 
 Returns:
