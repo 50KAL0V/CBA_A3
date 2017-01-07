@@ -47,11 +47,11 @@ if (isServer) then {
         // check if command is available
         private _access = ["all"];
 
-        if (IS_ADMIN) then {
+        if (IS_ADMIN || isServer) then {
             _access pushBack "admin";
         };
 
-        if (IS_ADMIN_LOGGED) then {
+        if (IS_ADMIN_LOGGED || isServer) then {
             _access pushBack "adminlogged";
         };
 
