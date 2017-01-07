@@ -5,7 +5,7 @@ Description:
     Register a custom chat command on the local machine.
 
 Parameters:
-    _command      - Thing to attach event handler to. <STRING>
+    _command      - Chat command <STRING>
     _code         - Code to execute after command was entered. <STRING>
     _availableFor - "all", "admin" or "adminLogged" (optional, default: "admin") <STRING>
 
