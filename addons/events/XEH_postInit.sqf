@@ -34,8 +34,8 @@ if (isServer) then {
     params ["_message"];
 
     if ((_message select [0,1]) isEqualTo "#") then {
-        private _arguments = (_message select [1]) splitString " ";
-        private _command = _arguments deleteAt 0;
+        private _arguments = _message splitString " ";
+        private _command = (_arguments deleteAt 0) select [1];
 
         // check if command is available
         private _access = ["all"];
@@ -51,8 +51,17 @@ if (isServer) then {
         (GVAR(customChatCommands) getVariable _command) params ["_code", "_availableFor"];
 
         if (!isNil "_availableFor" && {_availableFor in _access}) then {
-            private ["_message", "_command", "_access", "_availableFor"];
-            _arguments call _code;
+            [_arguments, _code] call {
+                // prevent bad code from overwriting protected variables
+                private _message = nil;
+                private _arguments = nil;
+                private _command = nil;
+                private _access = nil;
+                private _code = nil;
+                private _availableFor = nil;
+
+                (_this select 0) call (_this select 1);
+            };
         };
     };
 }] call CBA_fnc_addEventHandler;
