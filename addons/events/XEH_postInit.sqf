@@ -42,7 +42,7 @@ if (isServer) then {
         };
 
         private _command = _message select [1, _index - 1];
-        private _argument = _message select [_index + 2];
+        private _argument = _message select [_index + 1];
 
         // check if command is available
         private _access = ["all"];
